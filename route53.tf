@@ -8,4 +8,8 @@ resource "aws_route53_record" "www" {
   type    = "A"
   ttl     = 60
   records = [aws_instance.this.public_ip]
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
