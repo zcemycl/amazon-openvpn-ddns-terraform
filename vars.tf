@@ -15,10 +15,6 @@ variable "subnet_id" {
   type = string
 }
 
-variable "sg_ids" {
-  type = list(string)
-}
-
 variable "instance_type" {
   type    = string
   default = "t2.small"
