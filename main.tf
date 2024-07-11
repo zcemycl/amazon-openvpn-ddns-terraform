@@ -14,8 +14,6 @@ resource "aws_instance" "this" {
   })
 
   lifecycle {
-    ignore_changes = [
-        user_data
-    ]
+    ignore_changes = all
   }
 }
