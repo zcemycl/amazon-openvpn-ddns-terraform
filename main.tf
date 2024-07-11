@@ -12,4 +12,10 @@ resource "aws_instance" "this" {
     domain         = var.domain
     subdomain      = "${var.subdomain}.${var.domain}"
   })
+
+  lifecycle {
+    ignore_changes = [
+        user_data
+    ]
+  }
 }
