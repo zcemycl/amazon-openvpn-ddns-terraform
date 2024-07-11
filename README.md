@@ -26,6 +26,13 @@
     ```
 2. Change your hostname when you have access to `subdomain.domain/admin`.
     - Configuration -> Network Settings -> Hostname or IP Address -> Enter your `subdomain.domain`.
+3. Check VPN Settings.
+    - EC2 should have a private ip address, like 10.1.2.214.
+    - VPC cidr is 10.1.0.0/16.
+    - Change Network Address to 10.1.16.0.
+    - Group Default IP Address Network (Optional) to 10.1.16.0/20.
+    - Have clients use specific DNS Servers -- YES : Primary 10.1.0.2
+    - YES using NAT.
 
 ```mermaid
 sequenceDiagram
