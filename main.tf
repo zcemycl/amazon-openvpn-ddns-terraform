@@ -6,7 +6,7 @@ resource "aws_instance" "this" {
   security_groups             = [module.security_groups.sg_ids["openvpn"].id]
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.this.name
-  user_data = templatefile("./setup.sh", {
+  user_data = templatefile("${path.module}/setup.sh", {
     admin_password = var.admin_pwd
     email          = var.email
     domain         = var.domain
