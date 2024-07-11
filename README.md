@@ -1,4 +1,7 @@
 # amazon-openvpn-ddns
+- Provide an alternative to set up OpenVPN Server in EC2.
+- Enable Dynamic Domain Name mapping to changing Elastic IP due to stopped instance. 
+- See example [here](/example/).
 
 ## Input Variables
 |Variable name|Description|Default|
