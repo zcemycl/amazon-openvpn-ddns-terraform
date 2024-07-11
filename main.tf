@@ -16,4 +16,8 @@ resource "aws_instance" "this" {
   lifecycle {
     ignore_changes = all
   }
+
+  tags = {
+    Name = "${var.prefix}-ddns-vpn-server"
+  }
 }
