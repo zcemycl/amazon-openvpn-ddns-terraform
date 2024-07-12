@@ -81,7 +81,7 @@ jobs:
      - name: Deploy
        if: ${{ github.event.inputs.confirm_deploy == 'true' }}
        env:
-         TF_VAR_OPENVPN_ADMIN_PWD: ${{ secrets.TF_VAR_OPENVPN_ADMIN_PWD }}
+         TF_VAR_ADMIN_PWD: ${{ secrets.TF_VAR_OPENVPN_ADMIN_PWD }}
          TF_VAR_AWS_REGION: ${{ github.event.inputs.aws_region }}
          TF_VAR_OPENVPN_SERVER_AMI: ${{ github.event.inputs.openvpn_server_ami }}
          TF_VAR_SUBDOMAIN: ${{ github.event.inputs.subdomain }}
