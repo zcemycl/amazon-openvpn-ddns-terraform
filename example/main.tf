@@ -62,7 +62,7 @@ resource "tls_private_key" "this" {
 resource "random_uuid" "uuid" {}
 
 resource "aws_s3_bucket" "this_creds" {
-  bucket        = "${var.prefix}-creds-bucket-${var.AWS_REGION}-${random_uuid.uuid.result}"
+  bucket        = "${var.prefix}-creds-${var.AWS_REGION}-${random_uuid.uuid.result}"
   force_destroy = true
 }
 
