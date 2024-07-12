@@ -29,7 +29,7 @@ variable "OPENVPN_SERVER_AMI" {
 
 
 variable "domain" {
-  type    = string
+  type = string
 }
 
 variable "SUBDOMAIN" {
@@ -41,5 +41,5 @@ variable "ADMIN_PWD" {
 }
 
 variable "email" {
-  type    = string
+  type = string
 }
