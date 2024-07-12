@@ -24,17 +24,6 @@ on:
           - ap-northeast-1
           - eu-central-1
           - eu-west-3
-      openvpn_server_ami:
-        type: choice
-        description: AMI image for server
-        default: ami-07d20571c32ba6cdc
-        options:
-          - ami-07d20571c32ba6cdc
-          - ami-0075013580f6322a1
-          - ami-056a29f2eddc40520
-          - ami-0162fe8bfebb6ea16
-          - ami-07652eda1fbad7432
-          - ami-0062b622072515714
       subdomain:
         type: string
         description: Subdomain Name
@@ -69,7 +58,6 @@ jobs:
        env:
          TF_VAR_ADMIN_PWD: ${{ secrets.TF_VAR_OPENVPN_ADMIN_PWD }}
          TF_VAR_AWS_REGION: ${{ github.event.inputs.aws_region }}
-         TF_VAR_OPENVPN_SERVER_AMI: ${{ github.event.inputs.openvpn_server_ami }}
          TF_VAR_SUBDOMAIN: ${{ github.event.inputs.subdomain }}
        run: |
          cp ${{ github.event.inputs.environment }}/* $terraform_directory
@@ -83,7 +71,6 @@ jobs:
        env:
          TF_VAR_ADMIN_PWD: ${{ secrets.TF_VAR_OPENVPN_ADMIN_PWD }}
          TF_VAR_AWS_REGION: ${{ github.event.inputs.aws_region }}
-         TF_VAR_OPENVPN_SERVER_AMI: ${{ github.event.inputs.openvpn_server_ami }}
          TF_VAR_SUBDOMAIN: ${{ github.event.inputs.subdomain }}
        run: |
          cd $terraform_directory

@@ -2,6 +2,11 @@ provider "aws" {
   region = var.AWS_REGION
 }
 
+# network
+data "aws_availability_zones" "this" {
+  state = "available"
+}
+
 resource "aws_vpc" "this" {
   cidr_block           = var.vpc_cidr
   instance_tenancy     = "default"
@@ -36,7 +41,7 @@ resource "aws_subnet" "this" {
   count                                       = length(var.alb_subnets_cidr)
   vpc_id                                      = aws_vpc.this.id
   cidr_block                                  = element(var.alb_subnets_cidr, count.index)
-  availability_zone                           = element(var.availability_zones, count.index)
+  availability_zone                           = element(data.aws_availability_zones.this.names, count.index)
   map_public_ip_on_launch                     = true
   enable_resource_name_dns_a_record_on_launch = true
 }
@@ -48,24 +53,37 @@ resource "aws_route_table_association" "this" {
 }
 
 
-
+# store key
 resource "tls_private_key" "this" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
 
-resource "null_resource" "this" {
-  provisioner "local-exec" {
-    command = "echo '${tls_private_key.this.private_key_pem}' > private_key.pem"
-  }
+resource "aws_s3_bucket" "this_creds" {
+  bucket        = "${var.prefix}-creds-bucket"
+  force_destroy = true
 }
 
+
+resource "aws_s3_object" "this_openvpn_public" {
+  bucket  = aws_s3_bucket.this_creds.id
+  key     = "openvpn/public_key.pem"
+  content = tls_private_key.this.public_key_openssh
+}
+
+resource "aws_s3_object" "this_openvpn_private" {
+  bucket  = aws_s3_bucket.this_creds.id
+  key     = "openvpn/private_key.pem"
+  content = tls_private_key.this.private_key_pem
+}
+
+# vpn server
 module "openvpn" {
   source             = "github.com/zcemycl/amazon-openvpn-ddns"
   AWS_REGION         = var.AWS_REGION
   vpc_id             = aws_vpc.this.id
   prefix             = var.prefix
-  openvpn_server_ami = var.OPENVPN_SERVER_AMI
+  openvpn_server_ami = lookup(var.OPENVPN_SERVER_AMI, var.AWS_REGION)
   subnet_id          = aws_subnet.this[0].id
   instance_type      = "t2.small"
   admin_pwd          = var.ADMIN_PWD
