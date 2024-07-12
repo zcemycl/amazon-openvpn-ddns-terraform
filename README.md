@@ -33,6 +33,7 @@
     - Group Default IP Address Network (Optional) to 10.1.16.0/20.
     - Have clients use specific DNS Servers -- YES : Primary 10.1.0.2
     - YES using NAT.
+    - VERY IMPORTANT -- Specify the private subnets to which all clients should be given access (one per line).
 
 ```mermaid
 sequenceDiagram
