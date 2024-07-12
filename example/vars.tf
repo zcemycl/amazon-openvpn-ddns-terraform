@@ -22,7 +22,7 @@ variable "alb_subnets_cidr" {
   default = ["10.1.0.0/21"]
 }
 
-variable "openvpn_server_ami" {
+variable "OPENVPN_SERVER_AMI" {
   type    = string
   default = "ami-07d20571c32ba6cdc"
 }
@@ -32,11 +32,11 @@ variable "domain" {
   type    = string
 }
 
-variable "subdomain" {
+variable "SUBDOMAIN" {
   type = string
 }
 
-variable "admin_pwd" {
+variable "ADMIN_PWD" {
   type = string
 }
 

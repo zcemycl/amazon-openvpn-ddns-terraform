@@ -65,12 +65,12 @@ module "openvpn" {
   AWS_REGION         = var.AWS_REGION
   vpc_id             = aws_vpc.this.id
   prefix             = var.prefix
-  openvpn_server_ami = var.openvpn_server_ami
+  openvpn_server_ami = var.OPENVPN_SERVER_AMI
   subnet_id          = aws_subnet.this[0].id
   instance_type      = "t2.small"
-  admin_pwd          = var.admin_pwd
+  admin_pwd          = var.ADMIN_PWD
   email              = var.email
-  subdomain          = var.subdomain
+  subdomain          = var.SUBDOMAIN
   domain             = var.domain
   public_key_openssh = tls_private_key.this.public_key_openssh
 }
