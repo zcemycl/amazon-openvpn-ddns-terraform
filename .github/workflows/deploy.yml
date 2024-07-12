@@ -1,0 +1,80 @@
+name: Deploy Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: Which environment to deploy
+        default: production
+        options:
+          - production
+      confirm_deploy:
+        type: boolean
+        description: Confirm Apply Changes?
+        default: false
+      aws_region:
+        type: choice
+        description: Region to deploy vpn server
+        default: eu-west-2
+        options:
+          - eu-west-2
+          - us-west-2
+          - ap-northeast-2
+          - ap-northeast-1
+          - eu-central-1
+          - eu-west-3
+      openvpn_server_ami:
+        type: choice
+        description: AMI image for server
+        default: ami-07d20571c32ba6cdc
+        options:
+          - ami-07d20571c32ba6cdc
+          - ami-0075013580f6322a1
+          - ami-056a29f2eddc40520
+          - ami-0162fe8bfebb6ea16
+          - ami-07652eda1fbad7432
+          - ami-0062b622072515714
+
+
+env:
+  terraform_directory: example
+  terraform_version: 1.3.0
+
+jobs:
+  deployment:
+    if: github.actor == 'zcemycl'
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_OPENVPN_ADMIN_PWD: ${{ secrets.TF_VAR_OPENVPN_ADMIN_PWD }}
+      TF_VAR_AWS_REGION: ${{ github.event.inputs.aws_region }}
+      TF_VAR_OPENVPN_SERVER_AMI: ${{ github.event.inputs.openvpn_server_ami }}
+    steps:
+     - name: Checkout the repository to the runner
+       uses: actions/checkout@v2
+
+     - name: Setup Terraform with specified version on the runner
+       uses: hashicorp/setup-terraform@v2
+       with:
+         terraform_version: $terraform_version
+
+     - name: Configure AWS credentials
+       uses: aws-actions/configure-aws-credentials@v2
+       with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID}}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: ${{ github.event.inputs.aws_region }}
+
+     - name: Initialise, check and plan
+       run: |
+         cp ${{ github.event.inputs.environment }}/* $terraform_directory
+         cd $terraform_directory
+         terraform init
+         terraform plan
+       continue-on-error: true
+
+     - name: Deploy
+       if: ${{ github.event.inputs.confirm_deploy == 'true' }}
+       run: |
+         cd $terraform_directory
+         terraform apply -auto-approve
