@@ -34,6 +34,7 @@
     - Have clients use specific DNS Servers -- YES : Primary 10.1.0.2
     - YES using NAT.
     - VERY IMPORTANT -- Specify the private subnets to which all clients should be given access (one per line).
+    - VERY IMPORTANT -- Specify the network address to which does not conflict with any CIDR. For example, API on 10.1.16.0/21, avoid using 10.1.16.0 because it will make the openvpn unreachable to API. 
 
 ```mermaid
 sequenceDiagram
