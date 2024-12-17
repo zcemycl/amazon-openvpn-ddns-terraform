@@ -84,4 +84,5 @@ cmdline='python3 /home/ubuntu/update-ddns.py --domain ${domain} --subdomain ${su
 sudo crontab <<EOF
 0 1 * * * $cmdline
 @reboot $cmdline &
+@reboot certbot renew &
 EOF
